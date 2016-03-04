@@ -1,0 +1,39 @@
+#
+#
+#
+Install Puppet Master
+
+
+# To check your hostname
+hostname 
+
+# To check your FQDN, run 
+hostname -f
+
+#in /etc/sysconfig/network
+
+sudo nano /etc/sysconfig/network
+HOSTNAME=myserver.domain.com
+
+#in /etc/hosts
+
+wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
+
+
+#restart networking
+/etc/init.d/network restart
+
+hostname puppetmaster.local
+hostname node01.local
+
+
+
+dpkg -i puppetlabs-release-trusty.deb
+apt-get update
+
+wget puppetlabs-release-pc1-OS-VERSION.noarch.rpm
+rpm -ivh https://yum.puppetlabs.com/el/7/products/x86_64/puppetlabs-release-7-11.noarch.rpm
+yum install puppet
+
+
+
