@@ -1,0 +1,118 @@
+######### Server
+prod
+ubuntu
+checkMK
+
+sn1mdmt00pum01
+sn1mdmt00pum01.phx.gbl
+10.14.15.104	
+
+sudo gedit /etc/hostname /etc/hosts
+
+IP
+10.14.157.201
+MASK
+255.255.255.128
+GW
+10.14.157.132
+
+Pass
+checkMKrandomtest
+
+Routes on /etc/network/interfaces
+
+up route add -net 0.0.0.0 netmask 0.0.0.0 gw 10.14.157.132
+up route add -net 10.0.0.0 netmask 255.0.0.0 gw 10.14.157.129
+down /sbin/route del -net 10.0.0.0 netmask 255.0.0.0
+
+up route add -net 10.14.157.128 netmask 255.255.255.128 gw 0.0.0.0
+
+up /sbin/route add -net 10.0.0.0 netmask 255.0.0.0 gw 10.14.15.1
+down /sbin/route del -net 10.0.0.0 netmask 255.0.0.0
+
+dns-nameservers 10.20.230.57 10.20.255.9
+dns-search phx.gbl
+
+nano /etc/resolv.conf
+nameserver 10.20.230.57
+nameserver 10.20.255.9
+search phx.gbl
+
+pe_winagent::puppetserver: sn1mdmtpuppet01.phx.gbl
+pe_winagent::caserver:     sn1mdmtpuppet01.phx.gbl
+
+
+dns_alt_names = sn1mdmt00pum01,sn1mdmt00pum01.phx.gbl
+ping sn1mdmt00pum01.phx.gbl
+
+
+apt-get inistall puppetmaster
+puppet master --verbose --no-daemonize
+If you have a firewall running, please ensure the following TCP ports are open: 443, 4433, 8140, 61613
+
+
+#on server
+sn1mdmt00pum01
+sn1mdmt00pum01.phx.gbl
+
+puppet parser validate site.pp
+
+puppet config print <SETTING NAME> [--section <CONFIG SECTION>] [--environment <ENVIRONMENT>]
+puppet config print 
+puppet master --configprint certname
+
+#####certs in server
+puppetca --list
+puppetca -sign nameclient
+
+puppet cert --list
+puppet cert sign sn1mdmtpuppet01.phx.gbl
+
+puppet cert list
+puppet cert list -all
+puppet cert list "sn1mdmp04wdb01.phx.gbl"
+puppet cert sign sn1mdmt00sim02.phx.gbl
+
+puppet cert sign –all 
+puppet cert sign <NODE NAME>
+puppet cert sign SN1MDMP04WDB01
+
+puppet cert clean <NODE NAME>
+puppet cert clean sn1mdmt00sim02.phx.gbl
+puppet cert clean SN1MDMP04WDB01
+
+Is Time in Sync on Your Nodes?
+
+#is pe-puppetserver running?
+
+service --status-all
+
+[ + ]  pe-activemq
+[ - ]  pe-console-services
+[ + ]  pe-nginx
+[ - ]  pe-postgresql
+[ - ]  pe-puppetdb
+[ - ]  pe-puppetserver
+
+/sbin/service puppetmasterd restart
+/sbin/service httpd restart
+
+service pe-postgresql start
+service pe-puppetdb start
+service pe-puppetserver start
+service pe-console-services start
+
+service puppetmaster start
+service puppetserver restart
+
+/etc/init.d/puppetmaster start
+
+puppet master --mkusers
+
+cd manifest
+site.pp
+
+
+
+
+

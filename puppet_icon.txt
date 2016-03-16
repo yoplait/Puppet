@@ -1,0 +1,44 @@
+puppet_icon.txt
+
+
+/etc/puppet
+
+https://forge.puppetlabs.com/puppetlabs/tagmail
+
+
+[root@fc-tc-mgt-002 puppet]# more tagmail.conf
+all:    damien.wilmot@firecrestclinical.com,marianne.naughton@firecrestclinical.com
+
+is using pasenger
+https://docs.puppetlabs.com/guides/passenger.html
+
+
+
+ifconfig -a
+957  useradd -G fcrest-staff,fcrest-admins perezjc
+
+
+nmap -A -T4 10.0.3.33
+
+
+nagios
+
+10.0.3.17
+https://10.0.3.17/nagios/
+http://nagios.firecrestclinical.com/
+
+nagios.fcrest.net
+
+fchqsvn@learningmedia.local
+e611bqETU8
+
+/etc/httpd/htpass
+
+report.engine:dA9KFgfpDOkTI
+
+
+htpasswd pepe /etc/httpd/htpass
+htpasswd /etc/httpd/htpass pepe
+
+Mxv4VsjdtN1W
+Require user pepe
