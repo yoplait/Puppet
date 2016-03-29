@@ -1,0 +1,266 @@
+# requisites
+
+# 3.8
+
+echo "deb http://deb.theforeman.org/ $(lsb_release -sc) 1.5" > /etc/apt/sources.list.d/foreman.list
+echo "deb http://deb.theforeman.org/ plugins 1.5" >> /etc/apt/sources.list.d/foreman.list
+wget -q http://deb.theforeman.org/pubkey.gpg -O- | apt-key add -
+apt-get update -y && apt-get install -y foreman-installer
+sudo apt-get -y autoremove
+ 
+ or
+
+wget https://apt.puppetlabs.com/puppetlabs-release-precise.deb && \
+sudo dpkg -i puppetlabs-release-precise.deb && \
+sudo apt-get update -yq && sudo apt-get install puppet -yq && \
+
+# problems ruby
+
+add-apt-repository -y ppa:brightbox/ruby-ng
+upgrade Foreman as usual
+apt-get install -y libaugeas-ruby1.9.1
+
+sudo apt-get update -y
+
+sudo apt-get install -y ruby1.9.1 ruby1.9.1-dev \
+rubygems1.9.1 irb1.9.1 ri1.9.1 rdoc1.9.1 \
+build-essential libopenssl-ruby1.9.1 libssl-dev zlib1g-dev
+
+sudo update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.1 400 \
+         --slave   /usr/share/man/man1/ruby.1.gz ruby.1.gz \
+                        /usr/share/man/man1/ruby1.9.1.1.gz \
+        --slave   /usr/bin/ri ri /usr/bin/ri1.9.1 \
+        --slave   /usr/bin/irb irb /usr/bin/irb1.9.1 \
+        --slave   /usr/bin/rdoc rdoc /usr/bin/rdoc1.9.1
+
+sudo update-alternatives --config ruby
+sudo update-alternatives --config gem
+
+ruby --version
+
+
+# 3.7
+
+apt-get install -y puppet=3.7.4-1puppetlabs1 puppet-common=3.7.4-1puppetlabs1 && \
+
+# install
+
+ping $(hostname -f)
+
+foreman-installer --help
+
+foreman-installer -i
+
+foreman-installer
+
+# on foreman
+cd /var/lib/puppet/ssl
+cd /etc/ssl/domain/certs/
+
+foreman-installer \
+--puppet-server=false \
+--foreman-proxy-puppetrun=false \
+--foreman-proxy-puppetca=false
+
+
+sudo foreman-installer \
+--no-enable-puppet \
+--no-enable-foreman-plugin-bootdisk \
+--no-enable-foreman-proxy \
+--foreman-db-adapter=mysql2 \
+--foreman-db-database=foreman \
+--foreman-db-host=foreman-db.domain \
+--foreman-db-manage=true \
+--foreman-db-username=foreman \
+--foreman-db-password='foreman_password' \
+--foreman-db-port=3306 \
+--foreman-db-type=mysql \
+
+--foreman-server-ssl-ca=/etc/ssl/domain/certs/ca.pem \
+--foreman-server-ssl-chain=/etc/ssl/domain/certs/ca.pem \
+--foreman-server-ssl-cert=/etc/ssl/domain/certs/domain.pem \
+--foreman-server-ssl-key=/etc/ssl/domain/private_keys/domain.pem
+
+
+echo "gem 'foreman_memcache'" | sudo tee -a /usr/share/foreman/bundler.d/Gemfile.local.rb
+sudo chown foreman:foreman /usr/share/foreman/bundler.d/Gemfile.local.rb
+cd ~foreman
+sudo -u foreman bundle update foreman_memcached
+
+
+#on puppet master
+
+wget -q http://deb.theforeman.org/foreman.asc -O- | sudo apt-key add -
+echo "deb http://deb.theforeman.org/ $(lsb_release -sc) 1.5" | sudo tee -a /etc/apt/sources.list.d/foreman.list
+echo "deb http://deb.theforeman.org/ plugins 1.5" | sudo tee -a /etc/apt/sources.list.d/foreman.list
+sudo apt-get update && sudo apt-get install foreman-installer
+
+sudo foreman-installer \
+--no-enable-foreman-plugin-bootdisk \
+--no-enable-foreman-plugin-setup \
+--no-enable-foreman \
+--foreman-proxy-foreman-base-url=https://foreman.example.com \
+--foreman-proxy-tftp=false \
+
+--foreman-proxy-ssl-ca=/etc/ssl/domain/certs/ca.pem \
+--foreman-proxy-ssl-cert=/etc/ssl/domain/certs/wit.prod.pem \
+--foreman-proxy-ssl-key=/etc/ssl/domain/private_keys/wit.prod.pem \
+--foreman-proxy-oauth-consumer-key=MY_CONSUMER_KEY \
+--foreman-proxy-oauth-consumer-secret=MY_CONSUMER_SECRET \
+
+
+sudo foreman-installer \
+--no-enable-foreman-plugin-bootdisk \
+--no-enable-foreman-plugin-setup \
+--no-enable-foreman \
+--puppet-ca-server=puppet.example.com \
+--puppet-server-ca=false \
+--puppet-server-foreman-url=https://foreman.example.com \
+--foreman-proxy-foreman-base-url=https://foreman.example.com \
+--foreman-proxy-tftp=false \
+--foreman-proxy-puppetca=false \
+
+--puppet-server-foreman-ssl-ca=/etc/ssl/domain/certs/ca.pem \
+--puppet-server-foreman-ssl-cert=/etc/ssl/domain/certs/domain.pem \
+--puppet-server-foreman-ssl-key=/etc/ssl/domain/private_keys/domain.pem \
+
+--foreman-proxy-ssl-ca=/etc/ssl/domain/certs/ca.pem \
+--foreman-proxy-ssl-cert=/etc/ssl/domain/certs/domain.pem \
+--foreman-proxy-ssl-key=/etc/ssl/domain/private_keys/domain.pem \
+--foreman-proxy-oauth-consumer-key=MY_CONSUMER_KEY \
+--foreman-proxy-oauth-consumer-secret=MY_CONSUMER_SECRET \
+
+
+
+
+# i dont do this i keep using what i used
+cd /var/lib/puppet/ssl/
+sudo rm -rf /var/lib/puppet/ssl/*
+
+sudo chown -R puppet:puppet /var/lib/puppet/ssl
+
+$ sudo puppet cert generate puppetmaster-1.domain --dns_alt_names=puppet,puppet.domain,puppetmaster-1.domain
+$ sudo puppet cert generate puppetmaster-2.domain --dns_alt_names=puppet,puppet.domain,puppetmaster-2.domain
+
+
+
+smartproxy
+
+git clone git://github.com/theforeman/smart-proxy.git
+
+bin/smart-proxy
+service foreman-proxy start
+
+For example:
+Name: Puppet-Proxy
+URL: http://puppet.example.com:8443
+
+#:foreman_url: http://foreman.example.com:3000
+:enabled: true
+
+ssldir: /var/lib/puppet/ssl
+puppetdir: /etc/puppet
+puppetca_use_sudo: true
+sudo_command: /usr/bin/sudo
+
+https://fqdn/
+
+
+default username/password of “admin” and “changeme”
+
+
+uninstall foreman
+
+sudo dpkg -l | grep foreman
+
+
+sudo apt-get --purge remove -y foreman foreman-installer foreman-proxy
+sudo rm -rf /var/lib/foreman /usr/share/foreman /usr/share/foreman-proxy/logs
+sudo rm -rf  /etc/apache2/conf.d/foreman.conf
+
+
+uninstall puppet
+
+sudo apt-get remove --purge -y puppet puppetmaster puppet-common puppetmaster-common puppetlabs-release
+sudo rm -rfy /usr/lib/ruby/vendor_ruby/puppet /usr/share/puppet /var/lib/puppet /etc/puppet
+sudo rm -yf /etc/apache2/conf.d/puppet.conf
+sudo apt-get -y autoremove
+
+
+sudo apt-get remove --purge -y foreman
+sudo apt-get remove --purge -y foreman-proxy
+sudo apt-get remove --purge -y ruby-foreman-api
+sudo apt-get remove --purge -y foreman-installer
+sudo apt-get -f install 
+sudo apt-get -y autoremove
+
+
+
+
+ /usr/bin/puppet cert --generate foreman.example.com returned 23 instead of one of [0]
+ /Stage[main]/Puppet::Server::Config/Exec[puppet_server_config-generate_ca_cert]/returns: change from notrun to 0
+: /usr/bin/puppet cert --generate foreman.example.com returned 23 instead of one of [0]
+ /Stage[main]/Puppet::Server::Config/Exec[puppet_server_config-generate_ca_cert]: Failed to call refresh: /usr/bin
+t cert --generate foreman.example.com returned 23 instead of one of [0]
+ /Stage[main]/Puppet::Server::Config/Exec[puppet_server_config-generate_ca_cert]: /usr/bin/puppet cert --generate
+n.example.com returned 23 instead of one of [0]
+ /Stage[main]/Apache::Service/Service[httpd]: Failed to call refresh: Could not start Service[httpd]: Execution of
+/init.d/apache2 start' returned 1: * Starting web server apache2
+ /Stage[main]/Apache::Service/Service[httpd]: Could not start Service[httpd]: Execution of '/etc/init.d/apache2 st
+eturned 1: * Starting web server apache2
+ /Stage[main]/Foreman_proxy::Register/Foreman_smartproxy[foreman.example.com]: Failed to call refresh: Proxy forem
+mple.com cannot be registered (Could not load data from https://foreman.example.com
+ /Stage[main]/Foreman_proxy::Register/Foreman_smartproxy[foreman.example.com]: Proxy foreman.example.com cannot be
+tered (Could not load data from https://foreman.example.com
+Installing             Done                                               [100%] [................................
+  Something went wrong! Check the log for ERROR-level output
+  * Foreman is running at 
+
+https://foreman.example.com
+https://192.168.32.30/
+
+Initial credentials are admin / aAmapdCGh3KCyAQv
+
+* Foreman Proxy is running at 
+https://foreman.example.com:8443
+https://192.168.32.30:8443
+
+
+* Puppetmaster is running at port 8140
+
+The full log is at /var/log/foreman-installer/foreman-installer.log
+root@foreman:/etc/foreman#
+
+
+
+Success!
+* Foreman is running at https://foreman.example.com
+Initial credentials are admin / 7XRiZQjCEmmSkrgT
+* Foreman Proxy is running at https://foreman.example.com:8443
+The full log is at /var/log/foreman-installer/foreman-installer.log
+
+
+
+#######
+Plugins
+
+foreman-installer --help | grep enable-
+--[no-]enable-foreman-plugin-discovery Enable 'foreman_plugin_discovery' puppet module (default: false)
+--[no-]enable-foreman-plugin-docker Enable 'foreman_plugin_docker' puppet module (default: false)
+--[no-]enable-foreman-plugin-hooks Enable 'foreman_plugin_hooks' puppet module (default: false)
+
+
+
+
+/usr/bin/apt-get -q -y -o DPkg::Options::=--force-confold install foreman-mysql2
+
+
+Get:1 http://deb.theforeman.org/ precise/1.10 foreman amd64 1.10.2-1 [47.5 MB]
+
+Get:1 http://deb.theforeman.org/ precise/1.10 foreman amd64 1.10.2-1 [47.5 MB]
+
+apt-get  -y install foreman-mysql2
+apt-get  -y install foreman-mysql
+
+
+apt-get  -y -q install foreman-mysql2

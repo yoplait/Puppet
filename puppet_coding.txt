@@ -1,0 +1,10 @@
+
+# verify code on line
+
+http://www.puppetlinter.com/
+
+# verify recipes 
+
+puppet parser validate site.pp
+puppet-lint site.pp 
+puppet apply site.pp

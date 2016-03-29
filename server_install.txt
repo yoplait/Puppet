@@ -27,7 +27,6 @@ hostname puppetmaster.local
 hostname node01.local
 
 
-
 dpkg -i puppetlabs-release-trusty.deb
 apt-get update
 

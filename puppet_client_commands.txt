@@ -1,0 +1,57 @@
+########## Client
+
+apt-get install puppet
+
+
+# test node 
+
+puppet agent --test
+puppet agent --test --noop
+puppet agent --test --noop --debug
+puppet agent --disable "my message"  --verbose
+
+puppet agent -tov —server=sn1mdmpuppet03.phx.gbl
+puppet agent -tov —server=sn1mdmpuppet01.phx.gbl
+
+puppet agent --server sn1mdmt00pum01.phx.gbl --waitforcert 60 --test --verbose
+
+sudo service puppet status # test that agent was installed	
+sudo puppet agent --test --waitforcert=60 # initiate certificate signing request (CSR)
+sudo puppet agent -td 
+
+#Is the Puppet Master Reachable From the Agents?
+
+telnet localhost 8140
+telnet 10.14.157.201 8140
+telnet sn1mdmpuppet01 8140 (using the special powershell attached)
+
+
+#verify puppet on windows
+
+sc stop puppet && sc start puppet --debug --trace
+windows.log
+
+# test configuration
+
+puppet status
+puppet config print 
+
+# nds modify puppet to the server
+
+.\install-puppet-enterprise.ps1 -Master sn1mdmt00pum01.phx.gbl
+
+puppetd --test	
+
+ping sn1mdmpuppet01
+
+
+
+
+	 —tags utilities::puppetclientbootstrap | /usr/bin/tee /tmp/puppet1a
+puppet agent --environment=production --test
+
+
+#Config
+
+cd /etc/puppetlabs/puppetserver/conf.d
+
